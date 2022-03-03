@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
-function Header() {
+import { connect } from "react-redux";
+
+const Header = ({ cart }) => {
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    cart.forEach((item) => {
+      count += item.qty;
+    });
+    setCartCount(count);
+  }, [cart, cartCount]);
+
   return (
     <div className="headerContainer">
       <div className="headerContainer_title">
@@ -20,12 +32,19 @@ function Header() {
               src={require("../../assets/cartImage/cart.png")}
               alt="vivo"
             ></img>
-            <div className="headerContainer_AddToCart_Count">1</div>
+            <div className="headerContainer_AddToCart_Count">{cartCount}</div>
           </div>
         </Link>
       </div>
     </div>
   );
-}
+};
 
-export default Header;
+const mapStateToProps = (state) => {
+  // console.log(state);
+  return {
+    cart: state.shop.cart,
+  };
+};
+
+export default connect(mapStateToProps)(Header);

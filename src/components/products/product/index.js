@@ -1,7 +1,14 @@
 import React from "react";
 import "./Product.css";
 
-const Product = ({ productData }) => {
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  addToCart,
+  loadCurrentItem,
+} from "../../redux/shopping/ShoppingAction";
+
+const Product = ({ productData, addToCart, loadCurrentItem }) => {
   // console.log(productData);
   return (
     <div className="contianer">
@@ -14,18 +21,32 @@ const Product = ({ productData }) => {
           <h2>{productData.title}</h2>
           <p>{productData.des}</p>
           <h3>₹ {productData.price}</h3>
-          <button>View Item</button>
-          <button>Add to Cart</button>
+
+          <Link to={`/product/${productData.id}`}>
+            <button onClick={() => loadCurrentItem(productData)}>
+              View Item
+            </button>
+          </Link>
+
+          <button onClick={() => addToCart(productData.id)}>Add to Cart</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Product;
+const mapDispatchToProps = (dispatch) => {
+  // console.log(state);
+  return {
+    addToCart: (id) => dispatch(addToCart(id)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item)),
+  };
+};
 
-{
-  /* <div className="contianer">
+export default connect(null, mapDispatchToProps)(Product);
+
+// {
+/* <div className="contianer">
 <div className="products">
   <div className="product_Container">
     <div className="product_Container_image">
@@ -42,4 +63,4 @@ export default Product;
   </div>
 </div>
 </div> */
-}
+// }

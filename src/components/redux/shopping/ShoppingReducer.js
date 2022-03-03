@@ -1,7 +1,14 @@
 import { PRODUCT_ITEM } from "./ShoppingTypes";
+import { ADD_TO_CART } from "./ShoppingTypes";
+import { REMOVE_FROM_CART } from "./ShoppingTypes";
+import { ADJUST_QTY } from "./ShoppingTypes";
+import { LOAD_CURRENT_ITEM } from "./ShoppingTypes";
+
 import vivo from "../../../assets/cartImage/vivo.png";
 import oppo from "../../../assets/cartImage/oppo.png";
 import redmi from "../../../assets/cartImage/redmi.png";
+import { act } from "react-dom/test-utils";
+
 const initialState = {
   products: [
     {
@@ -10,6 +17,7 @@ const initialState = {
       des: "Vivo S1 (Skyline Blue, 4GB RAM, 128GB Storage)",
       price: "14,899",
       image: vivo,
+      Memory: "1000 GB",
     },
     {
       id: 2,
@@ -17,6 +25,7 @@ const initialState = {
       des: "Oppo A53 128 GB, 6 GB RAM, Electric Black, Smartphone",
       price: "12,999",
       image: oppo,
+      Memory: "1000 GB",
     },
     {
       id: 3,
@@ -24,8 +33,11 @@ const initialState = {
       des: "Redmi Note 11T 5G (Matte Black 8GB RAM 128GB ROM) | Dimensity 810 5G",
       price: "18,999",
       image: redmi,
+      Memory: "1000 GB",
     },
   ],
+  cart: [],
+  currentItem: null,
 };
 
 const Shopreducer = (state = initialState, action) => {
@@ -34,6 +46,45 @@ const Shopreducer = (state = initialState, action) => {
       return {
         ...state,
         products: state.products,
+      };
+    case ADD_TO_CART:
+      const item = state.products.find((prod) => prod.id === action.payload.id);
+      const inCart = state.cart.find((item) =>
+        item.id === action.payload.id ? true : false
+      );
+      return {
+        ...state,
+        cart: inCart
+          ? state.cart.map((item) =>
+              item.id === action.payload.id
+                ? { ...item, qty: item.qty + 1 }
+                : item
+            )
+          : [
+              ...state.cart,
+              {
+                ...item,
+                qty: 1,
+              },
+            ],
+      };
+
+    case REMOVE_FROM_CART:
+      return {
+        ...state,
+        cart: state.cart.filter((item) => item.id !== action.payload.id),
+      };
+    case ADJUST_QTY:
+      return {
+        ...state,
+        cart: state.cart.map((item) =>
+          item.id === action.payload.id ? { ...item, qty: action.qty } : item
+        ),
+      };
+    case LOAD_CURRENT_ITEM:
+      return {
+        ...state,
+        currentItem: action.payload,
       };
     default:
       return state;
