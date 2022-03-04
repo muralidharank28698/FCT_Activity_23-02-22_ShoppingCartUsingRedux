@@ -7,6 +7,7 @@ import { LOAD_CURRENT_ITEM } from "./ShoppingTypes";
 import vivo from "../../../assets/cartImage/vivo.png";
 import oppo from "../../../assets/cartImage/oppo.png";
 import redmi from "../../../assets/cartImage/redmi.png";
+import poco from "../../../assets/cartImage/poco.png";
 import { act } from "react-dom/test-utils";
 
 const initialState = {
@@ -34,6 +35,14 @@ const initialState = {
       price: "18,999",
       image: redmi,
       Memory: "1000 GB",
+    },
+    {
+      id: 4,
+      title: "POCO M4 Pro ",
+      des: "POCO M4 Pro (Cool Blue, 64 GB)  (6 GB RAM)",
+      price: "14,999",
+      image: poco,
+      Memory: "800 GB",
     },
   ],
   cart: [],
@@ -78,7 +87,9 @@ const Shopreducer = (state = initialState, action) => {
       return {
         ...state,
         cart: state.cart.map((item) =>
-          item.id === action.payload.id ? { ...item, qty: action.qty } : item
+          item.id === action.payload.id
+            ? { ...item, qty: +action.payload.qty }
+            : item
         ),
       };
     case LOAD_CURRENT_ITEM:

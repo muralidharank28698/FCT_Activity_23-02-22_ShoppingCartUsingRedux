@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./SingleItem.css";
+// import Button from "@material-ui/core/Button";
+import { Button } from "@mui/material";
+import { addToCart } from "../../components/redux/shopping/ShoppingAction";
 
-const SingleItem = ({ currentItem }) => {
+const SingleItem = ({ currentItem, addToCart }) => {
   console.log(currentItem);
   return (
     // <
@@ -46,7 +49,15 @@ const SingleItem = ({ currentItem }) => {
           <tr>
             <th></th>
             <td style={{ float: "right" }}>
-              <button>Add To Cart</button>
+              {/* <button>Add To Cart</button> */}
+              <Button
+                onClick={() => addToCart(currentItem.id)}
+                // onClick={() => addToCart(currentItem.id)}
+                color="secondary"
+                variant="contained"
+              >
+                Add To Cart
+              </Button>
             </td>
           </tr>
           {/* <tr>
@@ -123,4 +134,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SingleItem);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (id) => dispatch(addToCart(id)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleItem);

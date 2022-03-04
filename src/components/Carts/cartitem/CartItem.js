@@ -1,9 +1,21 @@
-import React from "react";
-// import "./CartItem.css";
+import React, { useState } from "react";
+import "./CartItem.css";
+import { Button } from "@mui/material";
 
-function CartItem({ itemData }) {
+import { connect } from "react-redux";
+import { removeFromCart, adjustQty } from "../../redux/shopping/ShoppingAction";
+
+function CartItem({ itemData, removeFromCart, adjustQty }) {
   // console.log(itemData);
   // console.log(itemdata.title);
+  const [input, setInput] = useState(itemData.qty);
+
+  const onChangeHandler = (e) => {
+    // console.log(e.target.value);
+    setInput(e.target.value);
+    adjustQty(itemData.id, e.target.value);
+  };
+
   return (
     // <div className="">
     //   <div className="">
@@ -28,29 +40,37 @@ function CartItem({ itemData }) {
         <div className="container_description_content">
           <h2>{itemData.title}</h2>
           <p>{itemData.des}</p>
-          <h3>₹ {itemData.price}</h3>
-          Qty:
           <input
-            style={{
-              width: "120px",
-              height: "40px",
-              borderRadius: "30%",
-              textAlign: "center",
-              marginTop: "30px",
-              marginLeft: "20px",
-            }}
-            type="text"
+            type="number"
             name="qty"
-            value={itemData.qty}
+            value={input}
+            onChange={onChangeHandler}
           />
+          <h3>₹ {itemData.price}</h3>
+
           {/* <Link to={`/product/${itemData.id}`}>
             <button onClick={() => loadCurrentItem(itemData)}>View Item</button>
           </Link> */}
-          <button>Remove</button>
+          {/* <button onClick={() => removeFromCart(itemData.id)}>Remove</button> */}
+
+          <Button
+            onClick={() => removeFromCart(itemData.id)}
+            color="warning"
+            variant="contained"
+          >
+            Remove
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default CartItem;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeFromCart: (id) => dispatch(removeFromCart(id)),
+    adjustQty: (id, value) => dispatch(adjustQty(id, value)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(CartItem);

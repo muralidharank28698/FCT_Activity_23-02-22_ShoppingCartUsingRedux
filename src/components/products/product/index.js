@@ -1,8 +1,10 @@
 import React from "react";
 import "./Product.css";
+import { Button } from "@mui/material";
 
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+
 import {
   addToCart,
   loadCurrentItem,
@@ -23,12 +25,25 @@ const Product = ({ productData, addToCart, loadCurrentItem }) => {
           <h3>₹ {productData.price}</h3>
 
           <Link to={`/product/${productData.id}`}>
-            <button onClick={() => loadCurrentItem(productData)}>
+            {/* <button onClick={() => loadCurrentItem(productData)}>
               View Item
-            </button>
+            </button> */}
+            <Button
+              onClick={() => loadCurrentItem(productData)}
+              color="success"
+              variant="contained"
+            >
+              View Item
+            </Button>
           </Link>
 
-          <button onClick={() => addToCart(productData.id)}>Add to Cart</button>
+          <Button
+            onClick={() => addToCart(productData.id)}
+            color="primary"
+            variant="contained"
+          >
+            Add To Cart
+          </Button>
         </div>
       </div>
     </div>
